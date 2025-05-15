@@ -147,13 +147,3 @@ flowchart LR
 - Balancing architectural trade-offs between simplicity, scalability, and maintainability.
 
 ---
-
-## How to Run
-
-*Instructions on how to set up Kafka, run the Golang API, Python workers, and Next.js client.*
-
----
-
-## Contact & Feedback
-
-Feel free to reach out for questions, suggestions, or collaboration!
