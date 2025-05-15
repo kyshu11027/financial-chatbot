@@ -8,24 +8,51 @@ This is a personal project designed as a financial chatbot that leverages OpenAI
 
 ## Architecture
 
+### Architecture Diagram
+```mermaid
+flowchart LR
+  Postgres[PostgreSQL - Supabase]
+  MongoDB[MongoDB NoSQL]
+
+  GolangAPI[Golang API Server]
+  PythonWorker[Python Workers]
+  Kafka{Kafka Broker}
+
+  Client[Next.js Client]
+
+  Client <-->|HTTP + RPC| GolangAPI
+  GolangAPI <-->|Read / Write| Postgres
+
+  GolangAPI <-->|Produce / Consume| Kafka
+
+  Kafka <-->|Produce / Consume| PythonWorker
+
+  GolangAPI <-->|Read / Write| MongoDB
+  MongoDB <--> |Read / Write| PythonWorker
+```
+
 ### Components
 
 - **Next.js Client**  
-  Frontend UI that interacts with users, sending and receiving chat messages.
+  - Frontend UI that interacts with users, sending and receiving chat messages.
+  - Uses server rendered and client rendered components.
+  - Uses motion (previously framer motion) for dynamic UI interactions.
+  - Implements shadcn components for a modern look and feel.
 
 - **Golang API**  
-  Acts as the primary backend service. Responsibilities include:
+  - Acts as the primary backend service.
   - Handling client requests and authentication.
   - Managing relational data (Supabase/PostgreSQL) such as user profiles, conversations, and secure Plaid tokens.
-  - Managing NoSQL data (MongoDB) for storing and creating contextual documents.
+  - Managing NoSQL data (MongoDB) for storing and creating contextual and message documents.
   - Acting as the Kafka producer and consumer, facilitating communication between the client and Python worker.
   - Streaming responses to the client via Server-Sent Events (SSE).
+  - Uses RPC framework for communication
 
 - **Python Worker(s)**  
-  Asynchronous workers that:
+  - Asynchronous workers to handle LLM response generation.
   - Consume user message requests from Kafka.
   - Use LangChain and OpenAI API to generate LLM responses.
-  - Produce streaming response messages back into Kafka.
+  - Produce real time chunk streaming response messages back into Kafka.
 
 - **Kafka**  
   Message broker used for decoupling communication between Golang API and Python workers, supporting asynchronous processing and streaming.
