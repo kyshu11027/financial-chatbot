@@ -145,5 +145,3 @@ flowchart LR
 - Integrating LLM APIs in a scalable architecture.
 - Handling real-time streaming to clients using SSE.
 - Balancing architectural trade-offs between simplicity, scalability, and maintainability.
-
----
