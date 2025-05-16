@@ -33,13 +33,13 @@ flowchart LR
 
 ### Components
 
-- **Next.js Client**  
+- **Next.js Client [Repository Link](https://github.com/kyshu11027/financial-chatbot-client)**  
   - Frontend UI that interacts with users, sending and receiving chat messages.
   - Uses server rendered and client rendered components.
   - Uses motion (previously framer motion) for dynamic UI interactions.
   - Implements shadcn components for a modern look and feel.
 
-- **Golang API**  
+- **Golang API [Repository Link](https://github.com/kyshu11027/financial-chatbot-api)**  
   - Acts as the primary backend service.
   - Handling client requests and authentication.
   - Managing relational data (Supabase/PostgreSQL) such as user profiles, conversations, and secure Plaid tokens.
@@ -48,7 +48,7 @@ flowchart LR
   - Streaming responses to the client via Server-Sent Events (SSE).
   - Uses RPC framework for communication
 
-- **Python Worker(s)**  
+- **Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-llm)**  
   - Asynchronous workers to handle LLM response generation.
   - Consume user message requests from Kafka.
   - Use LangChain and OpenAI API to generate LLM responses.
