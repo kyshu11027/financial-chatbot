@@ -4,6 +4,8 @@
 
 This is a personal project designed as a financial chatbot that leverages OpenAI’s LLM via LangChain and Plaid to provide real-time conversational insights based on users' financial data. The system demonstrates a modern microservice-inspired architecture, combining frontend, backend, async processing, and streaming technologies.
 
+[DEMO VIDEO](https://youtu.be/8TAVY58alXA)
+
 ---
 
 ## Architecture
