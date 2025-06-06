@@ -46,7 +46,8 @@ flowchart LR
   - Managing NoSQL data (MongoDB) for storing and creating contextual and message documents.
   - Acting as the Kafka producer and consumer, facilitating communication between the client and Python worker.
   - Streaming responses to the client via Server-Sent Events (SSE).
-  - Uses RPC framework for communication
+  - Uses RPC framework for communication.
+  - Uses worker pooling to handle sending AI response streams back to the user in real time.
 
 - **Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-llm)**  
   - Asynchronous workers to handle LLM response generation.
@@ -123,9 +124,6 @@ flowchart LR
 ---
 
 ## Known Limitations & Future Improvements
-
-- **Single Goroutine Bottleneck**  
-  The current implementation uses a single Kafka consumer goroutine to handle SSE streaming, which could limit scalability and throughput. Future work includes implementing a consumer pool or partition-based consumer groups to handle higher concurrency.
 
 - **Operational Complexity**  
   The architecture’s complexity introduces challenges in deployment, monitoring, and debugging. Implementing observability tools (e.g., distributed tracing, centralized logging) would improve maintainability.
