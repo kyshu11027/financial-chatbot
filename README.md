@@ -17,7 +17,9 @@ flowchart LR
   MongoDB[MongoDB NoSQL]
 
   GolangAPI[Golang API Server]
-  PythonWorker[Python Workers]
+  LLMPythonWorker[LLM Python Workers]
+  VectorDBWorker[Vector DB Python Workers]
+  Qdrant[Qdrant Vector Store]
   Kafka{Kafka Broker}
 
   Client[Next.js Client]
@@ -27,10 +29,13 @@ flowchart LR
 
   GolangAPI <-->|Produce / Consume| Kafka
 
-  Kafka <-->|Produce / Consume| PythonWorker
+  Kafka <-->|Produce / Consume| LLMPythonWorker
+  Kafka -->|Produce| VectorDBWorker
+  VectorDBWorker --> |Write| Qdrant
+  LLMPythonWorker --> |Read| Qdrant
 
   GolangAPI <-->|Read / Write| MongoDB
-  MongoDB <--> |Read / Write| PythonWorker
+  MongoDB <--> |Read / Write| LLMPythonWorker
 ```
 
 ### Components
@@ -51,12 +56,18 @@ flowchart LR
   - Uses RPC framework for communication.
   - Uses worker pooling to handle sending AI response streams back to the user in real time.
 
-- **Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-llm)**  
+- **LLM Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-llm)**  
   - Asynchronous workers to handle LLM response generation.
   - Consume user message requests from Kafka.
-  - Use LangChain and OpenAI API to generate LLM responses.
+  - Use LangGraph and OpenAI API to generate LLM responses.
   - Produce real time chunk streaming response messages back into Kafka.
-
+ 
+- **Vector Store Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-vectordb-worker)**
+  - Asynchronous workers to handler transaction synchronization from Plaid to the vector database
+  - Using a vector database for RAG (Retrieval Augmented Generation) from the LLM workers
+  - Enables semantic search from the LLM, allowing relevant transactions to be retrieved using natural language
+  - PostgreSQL database tracks date of last synchronization, and client triggers a job when the date is older than 3 days
+  
 - **Kafka**  
   Message broker used for decoupling communication between Golang API and Python workers, supporting asynchronous processing and streaming.
 
