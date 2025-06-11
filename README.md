@@ -55,6 +55,7 @@ flowchart LR
   - Streaming responses to the client via Server-Sent Events (SSE).
   - Uses RPC framework for communication.
   - Uses worker pooling to handle sending AI response streams back to the user in real time.
+  - Uses channel buffers in case of client disconnects.
 
 - **LLM Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-llm)**  
   - Asynchronous workers to handle LLM response generation.
@@ -63,10 +64,10 @@ flowchart LR
   - Produce real time chunk streaming response messages back into Kafka.
  
 - **Vector Store Python Worker(s) [Repository Link](https://github.com/kyshu11027/financial-chatbot-vectordb-worker)**
-  - Asynchronous workers to handler transaction synchronization from Plaid to the vector database
-  - Using a vector database for RAG (Retrieval Augmented Generation) from the LLM workers
-  - Enables semantic search from the LLM, allowing relevant transactions to be retrieved using natural language
-  - PostgreSQL database tracks date of last synchronization, and client triggers a job when the date is older than 3 days
+  - Asynchronous workers to handler transaction synchronization from Plaid to the vector database.
+  - Using a vector database for RAG (Retrieval Augmented Generation) from the LLM workers.
+  - Enables semantic search from the LLM, allowing relevant transactions to be retrieved using natural language.
+  - PostgreSQL database tracks date of last synchronization, and client triggers a job when the date is older than 3 days.
   
 - **Kafka**  
   Message broker used for decoupling communication between Golang API and Python workers, supporting asynchronous processing and streaming.
@@ -144,9 +145,6 @@ flowchart LR
 - **Latency Due to Async Processing**  
   The use of Kafka for async message passing and LLM processing introduces inherent latency. Optimizations around worker concurrency, prefetching, or caching could help reduce response times.
 
-- **Connection Management & Fault Tolerance**  
-  SSE connections can be fragile; clients must handle reconnects, and the server should implement mechanisms to resume streams gracefully to avoid data loss.
-
 ---
 
 ## What I Learned
@@ -156,3 +154,5 @@ flowchart LR
 - Integrating LLM APIs in a scalable architecture.
 - Handling real-time streaming to clients using SSE.
 - Balancing architectural trade-offs between simplicity, scalability, and maintainability.
+- How to manage webhooks from third party APIs.
+- Cost associated with hosting applications and managed services is high and must be put into strong consideration.
